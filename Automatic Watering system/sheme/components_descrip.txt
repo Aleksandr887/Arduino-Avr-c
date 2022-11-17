@@ -1,0 +1,6 @@
+X1 LCD 16x2
+X1 Humidity Sensor
+X1 Single Pole Relay
+X1 DC Motor (instead of a pump)
+X1 Source Of Power
+R1 - 1 kΩ

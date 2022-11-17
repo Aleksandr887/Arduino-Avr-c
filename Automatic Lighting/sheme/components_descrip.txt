@@ -1,4 +1,4 @@
 X1 pyroelectric IR sensor
+X1 LED
 R1 - 1 kΩ
 R2 - 10 kΩ
-X1 LED
