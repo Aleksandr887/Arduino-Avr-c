@@ -34,18 +34,22 @@ unsigned long my_pulseIn(uint8_t pin, uint8_t state)
     unsigned long numloops = 0;
     unsigned long maxloops = microsecondsToClockCycles(TIMEOUT) / 16;
 
-    while ((*portInputRegister(port) & bit) == stateMask)
-        if (numloops++ == maxloops)
+    while ((*portInputRegister(port) & bit) == stateMask) {
+        if (numloops++ == maxloops) {
             return 0;
+        }
+    }
 
-    while ((*portInputRegister(port) & bit) != stateMask)
-        if (numloops++ == maxloops)
+    while ((*portInputRegister(port) & bit) != stateMask) {
+        if (numloops++ == maxloops) {
             return 0;
+        }
+    }
 
-    while ((*portInputRegister(port) & bit) == stateMask)
-    {
-        if (numloops++ == maxloops)
+    while ((*portInputRegister(port) & bit) == stateMask) {
+        if (numloops++ == maxloops) {
             return 0;
+        }
         width++;
     }
 
@@ -89,11 +93,9 @@ void rectangle_area()
 
     disp_area(a, b);
 
-    while (q)
-    {
+    while (q) {
         ch = keypad.waitForKey();
-        switch (ch)
-        {
+        switch (ch) {
         case '1':
             a = distance_measurement();
             break;
@@ -121,11 +123,9 @@ void circle_area()
     lcd.setCursor(0, 1);
     lcd.print("S = " + String(r * r * 3.14, 2) + "       ");
 
-    while (q)
-    {
+    while (q) {
         ch = keypad.waitForKey();
-        switch (ch)
-        {
+        switch (ch) {
         case '7':
             r = distance_measurement();
             break;
@@ -162,11 +162,9 @@ void volume_parall()
 
     disp_volume(a, b, c);
 
-    while (q)
-    {
+    while (q) {
         ch = keypad.waitForKey();
-        switch (ch)
-        {
+        switch (ch) {
         case '4':
             a = distance_measurement();
             break;
@@ -205,8 +203,7 @@ void loop()
 
     ch = keypad.waitForKey();
 
-    switch (ch)
-    {
+    switch (ch) {
     case 'A':
         rectangle_area();
         break;

@@ -85,8 +85,9 @@ byte mas[][5] = {
 
 void setup()
 {
-    for (int j = 0; j < NUMLINES; j++)
+    for (int j = 0; j < NUMLINES; j++) {
         pixels[j].begin();
+    }
     Serial.begin(9600);
 }
 
@@ -96,38 +97,31 @@ void loop()
     int r_m = 0;
     int n = 0;
 
-    if (Serial.available() > 0)
-    {
+    if (Serial.available() > 0) {
         c = Serial.readString();
-        for (int j = 0; j < c.length(); j++)
-        {
+        for (int j = 0; j < c.length(); j++) {
             if (c[j] == ' ')
                 c[j] = 'S';
         }
         flag = 1;
-    }
-    else
-    {
-        if (flag != 0)
-        {
-            if (ch_n != -(6 * c.length()))
-            {
+    } else {
+        if (flag != 0) {
+            if (ch_n != -(6 * c.length())) {
                 count = 0;
-                for (int j = 0; j < NUMLINES; j++)
+                for (int j = 0; j < NUMLINES; j++) {
                     pixels[j].clear();
+                }
 
-                while (i < c.length())
-                {
+                while (i < c.length()) {
                     int m = 0;
-                    while (m < sizeof(char_pos))
-                    {
-                        if ((byte)c[i] == char_pos[m])
-                        {
+                    while (m < sizeof(char_pos)) {
+                        if ((byte)c[i] == char_pos[m]) {
                             print_char(m, ch_n + r_m);
-                            if ((byte)c[i] == 83)
+                            if ((byte)c[i] == 83) {
                                 r_m = r_m + 2;
-                            else
+                            } else {
                                 r_m = r_m + 6;
+                            }
                             count += 1;
                             break;
                         }
@@ -139,11 +133,10 @@ void loop()
                 ch_n = ch_n - 1;
                 delay(speed_str);
 
-                for (int j = 0; j < NUMLINES; j++)
+                for (int j = 0; j < NUMLINES; j++) {
                     pixels[j].show();
-            }
-            else
-            {
+                }
+            } else {
                 flag = 0;
                 ch_n = NUMPIXELS - 1;
             }
@@ -156,56 +149,41 @@ void print_char(byte code, byte pos)
     int p;
     int for_i = 5;
 
-    if (pos == 11)
-    {
+    if (pos == 11) {
         for_i = 1;
-    }
-    else if (pos == 10)
-    {
+    } else if (pos == 10) {
         for_i = 2;
-    }
-    else if (pos == 9)
-    {
+    } else if (pos == 9) {
         for_i = 3;
-    }
-    else if (pos == 8)
-    {
+    } else if (pos == 8) {
         for_i = 4;
     }
 
-    if (pos < 12)
-    {
-        for (int x = 0; x < for_i; x++)
-        {
-            for (int y = 0; y < NUMLINES; y++)
-            {
+    if (pos < 12) {
+        for (int x = 0; x < for_i; x++) {
+            for (int y = 0; y < NUMLINES; y++) {
                 byte bit = bitRead(mas[code][x], y);
-                if (bit)
-                {
+                if (bit) {
                     p = pos + x;
                     pixels[y].setPixelColor(p, pixels[y].Color(255, 0, 0));
                 }
 
-                if (pos == 0)
-                {
-                    if (bit)
+                if (pos == 0) {
+                    if (bit) {
                         save_pos[x][y] = p;
-                    else
+                    } else {
                         save_pos[x][y] = NULL;
+                    }
                     counter = 1;
                 }
             }
         }
     }
 
-    if (pos > 250)
-    {
-        for (int x = 0; x < 5; x++)
-        {
-            for (int y = 0; y < NUMLINES; y++)
-            {
-                if (save_pos[x][y] != NULL)
-                {
+    if (pos > 250) {
+        for (int x = 0; x < 5; x++) {
+            for (int y = 0; y < NUMLINES; y++) {
+                if (save_pos[x][y] != NULL) {
                     p = save_pos[x][y] - counter;
                     pixels[y].setPixelColor(p, pixels[y].Color(255, 0, 0));
                 }

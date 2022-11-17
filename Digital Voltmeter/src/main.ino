@@ -65,12 +65,10 @@ void loop()
 {
     input_v = ADC_measur_voltage(1);
 
-    if (max < input_v)
-    {
+    if (max < input_v) {
         max = input_v;
     }
-    if (min > input_v)
-    {
+    if (min > input_v) {
         min = input_v;
     }
 

@@ -3,7 +3,7 @@
 #define HT16K33_ON 0x21
 #define HT16K33_STANDBY 0x20
 #define HT16K33_DISPLAYON 0x81
-#define HT16K33_DISPLAYOFF 0x80 
+#define HT16K33_DISPLAYOFF 0x80
 #define HT16K33_BRIGHTNESS 0xE0
 
 static const uint8_t charmap[] = {
@@ -36,20 +36,24 @@ private:
         Wire.write(cmd);
         Wire.endTransmission();
     }
+
     void writePos(uint8_t pos, uint8_t mask)
     {
-        if (_displayCache[pos] == mask)
+        if (_displayCache[pos] == mask) {
             return;
+        }
         Wire.beginTransmission(_addr);
         Wire.write(pos * 2);
         Wire.write(mask);
         Wire.endTransmission();
         _displayCache[pos] = mask;
     }
+
     void writePos(uint8_t pos, uint8_t mask, bool pnt)
     {
-        if (pnt)
+        if (pnt) {
             mask |= 0x80;
+        }
         writePos(pos, mask);
     }
 
@@ -84,11 +88,13 @@ public:
 
     void brightness(uint8_t val)
     {
-        if (val == _bright)
+        if (val == _bright) {
             return;
+        }
         _bright = val;
-        if (_bright > 0x0F)
+        if (_bright > 0x0F) {
             _bright = 0x0F;
+        }
         writeCmd(HT16K33_BRIGHTNESS | _bright);
     }
 
@@ -143,8 +149,7 @@ void Timer_start()
 {
     TCCR1A = 0;
     TCCR1B = 0;
-    OCR1A = 15624; // 15624
-    //OCR1A = 156;
+    OCR1A = 15624;
     TCCR1B |= (1 << WGM12);
     TCCR1B |= (1 << CS10);
     TCCR1B |= (1 << CS12);
@@ -180,78 +185,52 @@ void setup()
 
 void loop()
 {
-    if (mode == 0)
-    {
+    if (mode == 0) {
         disp.displayInt(0);
-    }
-    else if (mode == 1)
-    {
+    } else if (mode == 1) {
         disp.displayTime(hours, mins);
-    }
-    else if (mode == 2)
-    {
+    } else if (mode == 2) {
         disp.displayTime(0, sec);
     }
-  
-    if (digitalRead(5) & !value_5 & (mode == 1))
-    {
-        if (!settings)
-        {
+
+    if (digitalRead(5) & !value_5 & (mode == 1)) {
+        if (!settings) {
             Timer_stop();
             settings = 1;
-        }
-        else if (settings)
-        {
+        } else if (settings) {
             Timer_start();
             settings = 0;
         }
         value_5 = 1;
-    }
-    else if (!digitalRead(5))
-    {
+    } else if (!digitalRead(5)) {
         value_5 = 0;
     }
 
-    if (digitalRead(6) && !value_6)
-    {
-        if (settings == 1)
-        {
+    if (digitalRead(6) && !value_6) {
+        if (settings == 1) {
             hours = (hours > 22) ? 0 : ++hours;
-        }
-        else
-        {
+        } else {
             mode = (mode == 1) ? 2 : 1;
         }
         value_6 = 1;
-    }
-    else if (!digitalRead(6))
-    {
+    } else if (!digitalRead(6)) {
         value_6 = 0;
     }
 
-    if (digitalRead(7) && !value_7)
-    {
-        if (settings == 0)
-        {	
-            if (timer == 0)
-            {
+    if (digitalRead(7) && !value_7) {
+        if (settings == 0) {
+            if (timer == 0) {
                 Timer_start();
                 timer = 1;
                 mode = 1;
-            }
-            else
-            {
+            } else {
                 mode = (mode == 1) ? 2 : 1;
             }
-        }
-        else
-        {
+        } else {
             mins = (mins > 58) ? 0 : ++mins;
         }
         value_7 = 1;
-    }
-    else if (!digitalRead(7))
-    {
+    } else if (!digitalRead(7)) {
         value_7 = 0;
     }
 }
@@ -259,16 +238,13 @@ void loop()
 ISR(TIMER1_COMPA_vect)
 {
     sec++;
-    if (sec > 59)
-    {
+    if (sec > 59) {
         sec = 0;
         mins++;
-        if (mins > 59)
-        {
+        if (mins > 59) {
             mins = 0;
             hours++;
-            if (hours > 23)
-            {
+            if (hours > 23) {
                 hours = 0;
             }
         }
