@@ -1,0 +1,3 @@
+X1 7-segment LED HT16K33
+X3 Buttons
+R1 - R3 - 10 kΩ
